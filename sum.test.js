@@ -1,5 +1,5 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2 } = require('./openaiapi');
+const { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2 } = require('./openaiapi');
 
 
 
@@ -46,9 +46,14 @@ describe("Prompt Template", () => {
       expect(typeof r).toBe('string');
     })
   });
-  describe('Prompt Template V1', () => {
+  describe('Prompt Template V2', () => {
     it('Initialisation + Response', async () => {
       const r = await init_promptTemplateV2();
+      expect(r).toBeTruthy();
+    })
+    it('Get answer', async () => {
+      const r = await answFromPromptTemplateV2();
+      
       expect(typeof r).toBe('string');
     })
   })

@@ -9,15 +9,26 @@ let model;
 let promptTemplate;
 let chain;
 
+/*
+this is part 3/4 of the video 02
+*/
+async function answFromPromptTemplateV2(
+    changeInTemplate = {
+        word: "dog",
+    }
+) {
+    chain = promptTemplate.pipe(model);
+    const response = await chain.invoke(
+        changeInTemplate
+    );
+    return response.content;
+}
 
 /*
-this is part 1/4 of the video 02
+this is part 3/4 of the video 02
 */
 async function init_promptTemplateV2(
-    template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user.",
-    changeInTemplate = {
-        word: "dog"
-    }
+        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
 ){
     promptTemplate = ChatPromptTemplate.fromMessages([
         [
@@ -26,11 +37,7 @@ async function init_promptTemplateV2(
         ],
         ["human", "{word}"],
     ]);
-    chain = promptTemplate.pipe(model);
-    const response = await chain.invoke(
-        changeInTemplate
-    );
-    return response.content;
+    return true;
 }
 
 /*
@@ -91,4 +98,4 @@ async function chat_completion(text='what is your name? tell it in 10characters 
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2 };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2 };
