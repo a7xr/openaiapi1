@@ -21,15 +21,15 @@ describe('Mixing', () => {
 
     it('Initialisation template from v2', async () => {
       p = await init_promptTemplateV2( 
-        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
+        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
       );
       expect(typeof p).toBe('boolean');
     });
-    // it('Get answer', async () => {
-    //   const r = await answFromPromptTemplate(word = "dog");
-    //   // console.log(r)
-    //   expect(typeof r).toBe('string');
-    // })
+    it('Get answer', async () => {
+      const r = await answFromPromptTemplate(word = "chicken");
+      console.log(r)
+      expect(typeof r).toBe('string');
+    })
   })
   describe('promptFromTemplate, answFromTemplate', () => {
     it('Initialisation', async () => {
