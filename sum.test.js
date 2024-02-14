@@ -1,6 +1,9 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
 const { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 
+/*
+Video 02
+*/
 describe('Mixing', () => {
   beforeEach(() => {
     config();
@@ -9,13 +12,17 @@ describe('Mixing', () => {
   describe('init_promptTemplateV1, answFromTemplate', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
-        template = 'Tell a joke about {word}'
+        _template = 'Tell a joke about {word}',
+        _changeInTemplate = {
+          word: "dog"
+        }
       );
       expect(typeof p).toBe('string');
     });
     it('Get answer', async () => {
-      const r = await answFromPromptTemplate(_word = "dog");
-      // console.log(r)
+      const r = await answFromPromptTemplate(_word = "dinosaurs");
+      console.log("from init_promptTemplateV1");
+      console.log(r);
       expect(typeof r).toBe('string');
     })
   })
@@ -23,13 +30,14 @@ describe('Mixing', () => {
 
     it('Initialisation template from v2', async () => {
       p = await init_promptTemplateV2( 
-        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
+        _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
       );
       expect(typeof p).toBe('boolean');
     });
     it('Get answer', async () => {
-      const r = await answFromPromptTemplate(word = "chicken");
-      console.log(r)
+      const r = await answFromPromptTemplate(word = "mangoes");
+      console.log("from init_promptTemplateV2");
+      console.log(r);
       expect(typeof r).toBe('string');
     })
   })
