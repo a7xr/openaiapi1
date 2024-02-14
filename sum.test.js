@@ -13,6 +13,28 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
     config();
     load_model();
   })
+  describe('init_promptTemplateV1, answFromTemplate, CommaSeparatedListOutputParser', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        _template = 'Tell a joke about {word}',
+        _changeInTemplate = {
+          word: "dog"
+        }
+      );
+    })
+    it('Test CommaSeparatedListOutputParser', async () => {
+      const r = await answFromPromptTemplateWParser01(
+        _word = "dinosaurs",
+        _parser = new CommaSeparatedListOutputParser()
+      );
+      console.log("from Test CommaSeparatedListOutputParser");
+      console.log(r);
+      expect(Array.isArray(r)).toBeTruthy();
+    })
+  })
+  // describe('init_promptTemplateV2, answFromTemplate, StringOutputParser', () => {
+    
+  // })
   describe('init_promptTemplateV1, answFromTemplate, StringOutputParser', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    

@@ -18,10 +18,10 @@ async function answFromPromptTemplateWParser01(
     _word = 'dog',
     _parser = new StringOutputParser()
 ){
-    // console.log('typeof _parser');
-    // console.log(typeof _parser);
-    if (_parser instanceof StringOutputParser) {
-        chain = promptTemplate.pipe(model).pipe(_parser);
+    chain = promptTemplate.pipe(model).pipe(_parser);
+
+    if ((_parser instanceof StringOutputParser) | (_parser instanceof CommaSeparatedListOutputParser)) {
+        
         const response = await chain.invoke(
             {
                 word: _word
@@ -30,7 +30,14 @@ async function answFromPromptTemplateWParser01(
         console.log("typeof response");
         console.log(typeof response);
         return response;
-    } else {
+    } 
+    // else if (_parser instanceof CommaSeparatedListOutputParser) {
+        
+    //     return await chain.invoke({
+    //         word: _word
+    //     });
+    // }
+    else {
         return false;
     }
 }
