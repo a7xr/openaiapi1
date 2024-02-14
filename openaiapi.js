@@ -8,7 +8,9 @@ const {
     StringOutputParser,
     BaseOutputParser,
   } = require("@langchain/core/output_parsers");
-  
+
+const {z} = require("zod");
+
 // const path = require('path');
 
 let model;
@@ -17,7 +19,11 @@ let chain;
 
 async function answFromPromptTemplateWParser01(
     _word = 'dog',
-    _parser = new StringOutputParser()
+    _parser = new StringOutputParser(),
+    _dataToTreat = {
+        phrase: "Max is 30 years old.",
+        format_instructions: _parser.getFormatInstructions()
+    }
 ){
     chain = promptTemplate.pipe(model).pipe(_parser);
 
@@ -34,10 +40,7 @@ async function answFromPromptTemplateWParser01(
     } 
     else if (_parser.constructor.name == "StructuredOutputParser") {
         console.log("Heeeeeeeeeeeeeere")
-        const res = await chain.invoke({
-            phrase: "Max is 30 years old.",
-            format_instructions: _parser.getFormatInstructions()
-          });
+        const res = await chain.invoke(_dataToTreat);
         console.log("res", res);
         return res;
     }

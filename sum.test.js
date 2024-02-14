@@ -6,9 +6,58 @@ const {
   StringOutputParser,
   BaseOutputParser,
 } = require("@langchain/core/output_parsers");
+const {z} = require("zod");
+
+
+
+
+
+
+
+
+
+
+
 /*
-Video 02
+Video 03
 */
+describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser.fromZodSchema)', () => {
+  beforeEach(() => {
+    config();
+    load_model();
+  })
+  describe('init_promptTemplateV1, answFromTemplate, StructuredOutputParser', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        _template = "Extract information from the following phrase.\n{format_instructions}\n{phrase}",
+        _changeInTemplate = {
+          word: "dog"
+        }
+      );
+    })
+    it('Test StructuredOutputParser', async () => {
+      const r = await answFromPromptTemplateWParser01(
+        _word = "notUSedHere",
+        _parser = StructuredOutputParser.fromZodSchema(    
+          z.object({
+            recipe: z.string().describe("name of recipe"),
+            ingredients: z.array(z.string()).describe("ingredients"),
+          })
+        ),_dataToTreat = {
+          phrase: 			"The ingredients for a Spaghetti Bolognese recipe are tomatoes, minced beef, garlic, wine and herbs.",
+          format_instructions: _parser.getFormatInstructions(),
+        }
+      );
+      
+      expect(r).toHaveProperty('recipe');
+      expect(r).toHaveProperty('ingredients');
+    })
+    // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
+  })
+})
+
+
+
 describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser)', () => {
   beforeEach(() => {
     config();
@@ -25,6 +74,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
           word: "dog"
         }
       );
+      expect(p).toBe(true);
     })
     it('Test StructuredOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
@@ -32,10 +82,15 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
         _parser = StructuredOutputParser.fromNamesAndDescriptions({
           name: "The name of the person",
           age: "The name of the age"
-        })
+        }),
+        _dataToTreat = {
+          phrase: "Max is 45 years old.",
+          format_instructions: _parser.getFormatInstructions()
+        }
       );
       expect(r).toHaveProperty('name');
       expect(r).toHaveProperty('age');
+      expect(r.name).toBe('Max'); 
     })
     // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
   })
@@ -56,6 +111,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
           word: "dog"
         }
       );
+      expect(p).toBe(true);
     })
     it('Test CommaSeparatedListOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
@@ -78,6 +134,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
           word: "dog"
         }
       );
+      expect(p).toBe(true);
     })
     it('Test StringOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
@@ -94,7 +151,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
       p = await init_promptTemplateV2(    
         _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
       );
-      expect(typeof p).toBe('boolean');
+      expect(p).toBe(true);
     })
     it('Test StringOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
@@ -121,7 +178,7 @@ describe('Mixing init_promptTemplateX and answFromTemplate', () => {
           word: "dog"
         }
       );
-      expect(typeof p).toBe('boolean');
+      expect(p).toBe(true);
     });
     it('Get answer', async () => {
       const r = await answFromPromptTemplate(_word = "dinosaurs");
@@ -136,7 +193,7 @@ describe('Mixing init_promptTemplateX and answFromTemplate', () => {
       p = await init_promptTemplateV2( 
         _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
       );
-      expect(typeof p).toBe('boolean');
+      expect(p).toBe(true);
     });
     it('Get answer', async () => {
       const r = await answFromPromptTemplate(word = "mangoes");
