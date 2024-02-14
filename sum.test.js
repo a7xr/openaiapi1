@@ -1,5 +1,6 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
 const { answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { StructuredOutputParser } = require ("langchain/output_parsers");
 const {
   CommaSeparatedListOutputParser,
   StringOutputParser,
@@ -8,6 +9,39 @@ const {
 /*
 Video 02
 */
+describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser)', () => {
+  beforeEach(() => {
+    config();
+    load_model();
+  })
+  describe('init_promptTemplateV1, answFromTemplate, StructuredOutputParser', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        _template = `
+        Extract infromation from the following phrase. 
+        Formatting Instructions: {format_instructions}
+        Phrase: {phrase}`,
+        _changeInTemplate = {
+          word: "dog"
+        }
+      );
+    })
+    it('Test StructuredOutputParser', async () => {
+      const r = await answFromPromptTemplateWParser01(
+        _word = "dinosaurs",
+        _parser = StructuredOutputParser.fromNamesAndDescriptions({
+          name: "The name of the person",
+          age: "The name of the age"
+        })
+      );
+      expect(r).toHaveProperty('name');
+      expect(r).toHaveProperty('age');
+    })
+  })
+})
+
+
+
 describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', () => {
   beforeEach(() => {
     config();
@@ -86,7 +120,7 @@ describe('Mixing init_promptTemplateX and answFromTemplate', () => {
           word: "dog"
         }
       );
-      expect(typeof p).toBe('string');
+      expect(typeof p).toBe('boolean');
     });
     it('Get answer', async () => {
       const r = await answFromPromptTemplate(_word = "dinosaurs");

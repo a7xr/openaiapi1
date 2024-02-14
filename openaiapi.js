@@ -2,6 +2,7 @@
 const dotenv = require('dotenv');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
+// const { StructuredOutputParser } = require ("langchain/output_parsers");
 const {
     CommaSeparatedListOutputParser,
     StringOutputParser,
@@ -31,14 +32,19 @@ async function answFromPromptTemplateWParser01(
         console.log(typeof response);
         return response;
     } 
-    // else if (_parser instanceof CommaSeparatedListOutputParser) {
-        
-    //     return await chain.invoke({
-    //         word: _word
-    //     });
-    // }
+    else if (_parser.constructor.name == "StructuredOutputParser") {
+        console.log("Heeeeeeeeeeeeeere")
+        const res = await chain.invoke({
+            phrase: "Max is 30 years old.",
+            format_instructions: _parser.getFormatInstructions()
+          });
+        console.log("res", res);
+        return res;
+    }
     else {
-        return false;
+        // console.log("from StructuredOutputParser")
+        // console.log(Object.prototype.toString.call(_parser))
+        // console.log('Le type de _parser est ', _parser.constructor.name);
     }
 }
 
@@ -82,7 +88,8 @@ async function init_promptTemplateV1(
     }
 ) {
     promptTemplate = ChatPromptTemplate.fromTemplate(_template);
-    return await promptTemplate.format(_changeInTemplate);
+    // return await promptTemplate.format(_changeInTemplate);
+    return true;
 }
 
 /*
