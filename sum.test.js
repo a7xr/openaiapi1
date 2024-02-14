@@ -6,7 +6,7 @@ describe('Mixing', () => {
     config();
     load_model();
   })
-  describe('promptFromMessage, answFromTemplate', () => {
+  describe('init_promptTemplateV1, answFromTemplate', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         template = 'Tell a joke about {word}'
@@ -18,6 +18,8 @@ describe('Mixing', () => {
       // console.log(r)
       expect(typeof r).toBe('string');
     })
+  })
+  describe('init_promptTemplateV2, answFromTemplate', () => {
 
     it('Initialisation template from v2', async () => {
       p = await init_promptTemplateV2( 
@@ -28,22 +30,6 @@ describe('Mixing', () => {
     it('Get answer', async () => {
       const r = await answFromPromptTemplate(word = "chicken");
       console.log(r)
-      expect(typeof r).toBe('string');
-    })
-  })
-  describe('promptFromTemplate, answFromTemplate', () => {
-    it('Initialisation', async () => {
-      p = await init_promptTemplateV2(    
-        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
-      );
-      expect(typeof p).toBeTruthy();
-    });
-    it('Get answer2', async () => {
-      const r = await answFromPromptTemplateV2(
-        // changeInTemplate = {
-        //   word: "chicken"
-        // }
-      );
       expect(typeof r).toBe('string');
     })
   })
