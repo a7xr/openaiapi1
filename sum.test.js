@@ -1,5 +1,5 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 
 describe('Mixing', () => {
   beforeEach(() => {
@@ -34,51 +34,6 @@ describe('Mixing', () => {
     })
   })
 })
-
-describe("Prompt Template", () => {
-
-  beforeEach(() => {
-    config();
-    load_model();
-  })
-
-  /*
-    You have to understand the it("") inside describe("", ()=> {..})
-    - are ran one after one
-  */
-  describe('Prompt Template V1', () => {
-    it('Initialisation', async () => {
-      p = await init_promptTemplateV1(    
-        template = 'Tell a joke about {word}', 
-        changeInTemplate = {
-          word: "dog"
-        }
-      );
-      expect(typeof p).toBe('string');
-    });
-    it('Get answer', async () => {
-      const r = await answFromPromptTemplateV1();
-      
-      expect(typeof r).toBe('string');
-    })
-  });
-  describe('Prompt Template V2', () => {
-    it('Initialisation + Response', async () => {
-      const r = await init_promptTemplateV2();
-      expect(r).toBeTruthy();
-    })
-    it('Get answer', async () => {
-      const r = await answFromPromptTemplateV2(
-        // changeInTemplate = {
-        //   word: "chicken"
-        // }
-      );
-      
-      expect(typeof r).toBe('string');
-    })
-  })
-})
-
 
 describe('Basic', () => {
   it('loading the configuration', () => {

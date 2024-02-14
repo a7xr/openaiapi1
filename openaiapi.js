@@ -20,20 +20,6 @@ async function answFromPromptTemplate(
     );
     return response.content;
 }
-/*
-this is part 3/4 of the video 02
-*/
-async function answFromPromptTemplateV2(
-    _changeInTemplate = {
-        word: "dog",
-    }
-) {
-    chain = promptTemplate.pipe(model);
-    const response = await chain.invoke(
-        _changeInTemplate
-    );
-    return response.content;
-}
 
 /*
 this is part 3/4 of the video 02
@@ -49,19 +35,6 @@ async function init_promptTemplateV2(
         ["human", "{word}"],
     ]);
     return true;
-}
-
-/*
-this is part 2/4 of the video 02
-*/
-async function answFromPromptTemplateV1(
-    _change = {
-        word: "dog",
-    }
-) {
-    chain = promptTemplate.pipe(model);
-    const response = await chain.invoke(_change);
-    return response.content;
 }
 
 /*
@@ -109,4 +82,4 @@ async function chat_completion(text='what is your name? tell it in 10characters 
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2, answFromPromptTemplate };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate };
