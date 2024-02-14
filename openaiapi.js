@@ -24,13 +24,13 @@ async function answFromPromptTemplate(
 this is part 3/4 of the video 02
 */
 async function answFromPromptTemplateV2(
-    changeInTemplate = {
+    _changeInTemplate = {
         word: "dog",
     }
 ) {
     chain = promptTemplate.pipe(model);
     const response = await chain.invoke(
-        changeInTemplate
+        _changeInTemplate
     );
     return response.content;
 }
@@ -39,12 +39,12 @@ async function answFromPromptTemplateV2(
 this is part 3/4 of the video 02
 */
 async function init_promptTemplateV2(
-        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
+        _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
 ){
     promptTemplate = ChatPromptTemplate.fromMessages([
         [
           "system",
-          template,
+          _template,
         ],
         ["human", "{word}"],
     ]);
@@ -55,12 +55,12 @@ async function init_promptTemplateV2(
 this is part 2/4 of the video 02
 */
 async function answFromPromptTemplateV1(
-    change = {
+    _change = {
         word: "dog",
     }
 ) {
     chain = promptTemplate.pipe(model);
-    const response = await chain.invoke(change);
+    const response = await chain.invoke(_change);
     return response.content;
 }
 
@@ -68,13 +68,13 @@ async function answFromPromptTemplateV1(
 this is part 1/4 of the video 02
 */
 async function init_promptTemplateV1(
-    template = 'Tell a joke about {word}', 
-    changeInTemplate = {
+    _template = 'Tell a joke about {word}', 
+    _changeInTemplate = {
         word: "dog"
     }
 ) {
-    promptTemplate = ChatPromptTemplate.fromTemplate(template);
-    return await promptTemplate.format(changeInTemplate);
+    promptTemplate = ChatPromptTemplate.fromTemplate(_template);
+    return await promptTemplate.format(_changeInTemplate);
 }
 
 /*
@@ -90,12 +90,12 @@ function config(){
 config() and load_model(x, x) are mandatory on all videos
 */
 function load_model(
-    temperature = 0.9, 
-    modelName = "gpt-3.5-turbo"
+    _temperature = 0.9, 
+    _modelName = "gpt-3.5-turbo"
 ) {
     model = new ChatOpenAI({
-      modelName: modelName,
-      temperature: temperature,
+      modelName: _modelName,
+      temperature: _temperature,
     });
     return model;
 } 
