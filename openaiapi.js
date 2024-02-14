@@ -9,6 +9,17 @@ let model;
 let promptTemplate;
 let chain;
 
+async function answFromPromptTemplate(
+    _word = 'dog'
+){
+    chain = promptTemplate.pipe(model);
+    const response = await chain.invoke(
+        {
+            word: _word
+        }
+    );
+    return response.content;
+}
 /*
 this is part 3/4 of the video 02
 */
@@ -98,4 +109,4 @@ async function chat_completion(text='what is your name? tell it in 10characters 
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2 };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2, answFromPromptTemplate };

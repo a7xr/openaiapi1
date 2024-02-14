@@ -1,23 +1,53 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2 } = require('./openaiapi');
+const { config, load_model, chat_completion, init_promptTemplateV1, answFromPromptTemplateV1, init_promptTemplateV2, answFromPromptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 
+describe('Mixing', () => {
+  beforeEach(() => {
+    config();
+    load_model();
+  })
+  describe('promptFromMessage, answFromTemplate', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        template = 'Tell a joke about {word}'
+      );
+      expect(typeof p).toBe('string');
+    });
+    it('Get answer', async () => {
+      const r = await answFromPromptTemplate(_word = "dog");
+      // console.log(r)
+      expect(typeof r).toBe('string');
+    })
 
-
-describe('Basic', () => {
-  it('loading the configuration', () => {
-    expect(config()).toBeTruthy();
-  });
-  it('loading the model', () => {
-    expect(load_model()).toBeTruthy();
-  });
-
-  it('Chat completion', async () => {
-    res = await chat_completion();
-    console.log(res);
-    expect(typeof res).toBe('string');
-  });
-
-});
+    it('Initialisation template from v2', async () => {
+      p = await init_promptTemplateV2( 
+        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
+      );
+      expect(typeof p).toBe('boolean');
+    });
+    // it('Get answer', async () => {
+    //   const r = await answFromPromptTemplate(word = "dog");
+    //   // console.log(r)
+    //   expect(typeof r).toBe('string');
+    // })
+  })
+  describe('promptFromTemplate, answFromTemplate', () => {
+    it('Initialisation', async () => {
+      p = await init_promptTemplateV2(    
+        template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user."
+      );
+      expect(typeof p).toBeTruthy();
+    });
+    it('Get answer2', async () => {
+      const r = await answFromPromptTemplateV2(
+        // changeInTemplate = {
+        //   word: "chicken"
+        // }
+      );
+      expect(typeof r).toBe('string');
+    })
+  })
+})
 
 describe("Prompt Template", () => {
 
@@ -52,13 +82,33 @@ describe("Prompt Template", () => {
       expect(r).toBeTruthy();
     })
     it('Get answer', async () => {
-      const r = await answFromPromptTemplateV2();
+      const r = await answFromPromptTemplateV2(
+        // changeInTemplate = {
+        //   word: "chicken"
+        // }
+      );
       
       expect(typeof r).toBe('string');
     })
   })
 })
 
+
+describe('Basic', () => {
+  it('loading the configuration', () => {
+    expect(config()).toBeTruthy();
+  });
+  it('loading the model', () => {
+    expect(load_model()).toBeTruthy();
+  });
+
+  it('Chat completion', async () => {
+    res = await chat_completion();
+    console.log(res);
+    expect(typeof res).toBe('string');
+  });
+
+});
 
 
 // // const { config } = require('./openaiapi');
