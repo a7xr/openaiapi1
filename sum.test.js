@@ -8,8 +8,26 @@ const {
 } = require("@langchain/core/output_parsers");
 const {z} = require("zod");
 
-
-
+/*
+Video 04
+*/
+describe('Retrievan chains', () => {
+  beforeEach(() => {
+    config();
+    load_model();
+  })
+  describe('init_promptTemplateV1, createDoc, chain.invoke(', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        _template =   
+          `Answer the user's question from the following context: 
+          Context {context}
+          Question: {input}`,
+      );
+      expect(p).toBeTruthy();
+    })
+  })
+})
 
 
 
@@ -30,10 +48,8 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = "Extract information from the following phrase.\n{format_instructions}\n{phrase}",
-        _changeInTemplate = {
-          word: "dog"
-        }
       );
+      expect(p).toBeTruthy();
     })
     it('Test StructuredOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
@@ -70,9 +86,6 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
           Extract information from the following phrase. 
           Formatting Instructions: {format_instructions}
           Phrase: {phrase}`,
-        _changeInTemplate = {
-          word: "dog"
-        }
       );
       expect(p).toBe(true);
     })
@@ -107,9 +120,6 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = 'Tell a joke about {word}',
-        _changeInTemplate = {
-          word: "dog"
-        }
       );
       expect(p).toBe(true);
     })
@@ -130,9 +140,6 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = 'Tell a joke about {word}',
-        _changeInTemplate = {
-          word: "dog"
-        }
       );
       expect(p).toBe(true);
     })
@@ -174,9 +181,6 @@ describe('Mixing init_promptTemplateX and answFromTemplate', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = 'Tell a joke about {word}',
-        _changeInTemplate = {
-          word: "dog"
-        }
       );
       expect(p).toBe(true);
     });

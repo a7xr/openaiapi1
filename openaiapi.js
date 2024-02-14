@@ -86,9 +86,6 @@ this is part 1/4 of the video 02
 */
 async function init_promptTemplateV1(
     _template = 'Tell a joke about {word}', 
-    _changeInTemplate = {
-        word: "dog"
-    }
 ) {
     promptTemplate = ChatPromptTemplate.fromTemplate(_template);
     // return await promptTemplate.format(_changeInTemplate);
