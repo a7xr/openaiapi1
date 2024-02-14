@@ -76,8 +76,8 @@ function load_model(
 /*
     This is for the video 01
 */
-async function chat_completion(text='what is your name? tell it in 10characters max') {
-    const response = await model.invoke(text);
+async function chat_completion(_text='what is your name? tell it in 10characters max') {
+    const response = await model.invoke(_text);
     return response.content;
 }
 
