@@ -52,7 +52,8 @@ describe('Basic', () => {
   });
 
   it('Chat completion', async () => {
-    res = await chat_completion();
+    res = await chat_completion(_text='tell me a joke about cat? tell it in 10characters max');
+    console.log('From Chat Completion')
     console.log(res);
     expect(typeof res).toBe('string');
   });
