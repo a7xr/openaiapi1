@@ -18,7 +18,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = `
-          Extract infromation from the following phrase. 
+          Extract information from the following phrase. 
           Formatting Instructions: {format_instructions}
           Phrase: {phrase}`,
         _changeInTemplate = {
@@ -37,6 +37,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
       expect(r).toHaveProperty('name');
       expect(r).toHaveProperty('age');
     })
+    // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
   })
 })
 
