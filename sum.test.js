@@ -32,6 +32,23 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
       expect(typeof r).toBe('string');
     })
   })
+  describe('init_promptTemplateV2, answFromTemplate, StringOutputParser', () => {
+    it('Initialisation template from v2', async () => {
+      p = await init_promptTemplateV2(    
+        _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
+      );
+      expect(typeof p).toBe('boolean');
+    })
+    it('Test StringOutputParser', async () => {
+      const r = await answFromPromptTemplateWParser01(
+        _word = "dinosaurs",
+        _parser = new StringOutputParser()
+      );
+      console.log("from Test StringOutputParser");
+      console.log(r);
+      expect(typeof r).toBe('string');
+    })
+  })
 })
 
 describe('Mixing init_promptTemplateX and answFromTemplate', () => {
