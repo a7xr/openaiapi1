@@ -1,10 +1,40 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
-
+const { answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const {
+  CommaSeparatedListOutputParser,
+  StringOutputParser,
+  BaseOutputParser,
+} = require("@langchain/core/output_parsers");
 /*
 Video 02
 */
-describe('Mixing', () => {
+describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', () => {
+  beforeEach(() => {
+    config();
+    load_model();
+  })
+  describe('init_promptTemplateV1, answFromTemplate, StringOutputParser', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        _template = 'Tell a joke about {word}',
+        _changeInTemplate = {
+          word: "dog"
+        }
+      );
+    })
+    it('Test StringOutputParser', async () => {
+      const r = await answFromPromptTemplateWParser01(
+        _word = "dinosaurs",
+        _parser = new StringOutputParser()
+      );
+      console.log("from Test StringOutputParser");
+      console.log(r);
+      expect(typeof r).toBe('string');
+    })
+  })
+})
+
+describe('Mixing init_promptTemplateX and answFromTemplate', () => {
   beforeEach(() => {
     config();
     load_model();

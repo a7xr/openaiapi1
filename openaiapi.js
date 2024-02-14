@@ -2,16 +2,44 @@
 const dotenv = require('dotenv');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
-
+const {
+    CommaSeparatedListOutputParser,
+    StringOutputParser,
+    BaseOutputParser,
+  } = require("@langchain/core/output_parsers");
+  
 // const path = require('path');
 
 let model;
 let promptTemplate;
 let chain;
 
-async function answFromPromptTemplate(
-    _word = 'dog'
+async function answFromPromptTemplateWParser01(
+    _word = 'dog',
+    _parser = new StringOutputParser()
 ){
+    // console.log('typeof _parser');
+    // console.log(typeof _parser);
+    if (_parser instanceof StringOutputParser) {
+        chain = promptTemplate.pipe(model).pipe(_parser);
+        const response = await chain.invoke(
+            {
+                word: _word
+            }
+        );
+        console.log("typeof response");
+        console.log(typeof response);
+        return response;
+    } else {
+        return false;
+    }
+}
+
+async function answFromPromptTemplate(
+    _word = 'dog',
+    // _parser = new StringOutputParser()
+){
+    // chain = promptTemplate.pipe(model).pipe(_parser);
     chain = promptTemplate.pipe(model);
     const response = await chain.invoke(
         {
@@ -81,4 +109,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, answFromPromptTemplateWParser01 };
