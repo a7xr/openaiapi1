@@ -8,7 +8,7 @@ const {
     StringOutputParser,
     BaseOutputParser,
   } = require("@langchain/core/output_parsers");
-
+const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 const {z} = require("zod");
 
 // const path = require('path');
@@ -16,6 +16,27 @@ const {z} = require("zod");
 let model;
 let promptTemplate;
 let chain;
+
+async function createChainForDoc(
+    _template = `
+        Answer the user's question from the following context: 
+        Context {context}
+        Question: {input}
+    `
+){
+    const prompt = ChatPromptTemplate.fromTemplate(
+        _template
+    );
+
+    // console.log("prompt: ", prompt)
+    // console.log("promptTemplate: ", promptTemplate)
+
+
+    chain = await createStuffDocumentsChain({
+        llm: model,
+        prompt,
+    });
+}
 
 async function answFromPromptTemplateWParser01(
     _word = 'dog',
@@ -64,7 +85,6 @@ async function answFromPromptTemplate(
     );
     return response.content;
 }
-
 /*
 this is part 3/4 of the video 02
 */
@@ -123,4 +143,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, answFromPromptTemplateWParser01 };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, answFromPromptTemplateWParser01, createChainForDoc };

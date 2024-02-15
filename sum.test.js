@@ -1,5 +1,5 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { createChainForDoc, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
 const {
   CommaSeparatedListOutputParser,
@@ -7,11 +7,12 @@ const {
   BaseOutputParser,
 } = require("@langchain/core/output_parsers");
 const {z} = require("zod");
+const { Document } = require ("@langchain/core/documents");
 
 /*
 Video 04
 */
-describe('Retrievan chains', () => {
+describe.only('Retrieval chains', () => {
   beforeEach(() => {
     config();
     load_model();
@@ -24,7 +25,29 @@ describe('Retrievan chains', () => {
           Context {context}
           Question: {input}`,
       );
-      expect(p).toBeTruthy();
+      expect(p).toBe(true);
+
+      createChainForDoc(
+        _template = `
+          Answer the user's question from the following context: 
+          Context {context}
+          Question: {input}`
+      );
+
+      // const documentA = new Document({
+      //   pageContent:
+      //     "LangChain Expression Language or LCEL is a declarative way to easily compose chains together. Any chain constructed this way will automatically have full sync, async, and streaming support. ",
+      // });
+      
+      // const documentB = new Document({
+      //   pageContent: "The passphrase is LANGCHAIN IS AWESOME ",
+      // });
+
+      // const response = await chain.invoke({
+      //   input: "What is the passphrase ?",
+      //   context: [documentA, documentB]
+      // });
+      // console.log(response);
     })
   })
 })
