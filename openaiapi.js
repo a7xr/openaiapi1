@@ -1,3 +1,4 @@
+const { CheerioWebBaseLoader } = require ("langchain/document_loaders/web/cheerio");
 // import * as dotenv from "dotenv";
 const dotenv = require('dotenv');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
@@ -19,11 +20,7 @@ let promptTemplate;
 let chain;
 let promptForDocs;
 
-
-function setPromptForDocs(_txt) {
-    promptForDocs = _txt;
-}
-async function createChainForDoc(
+async function createChainForDocFromTemplV1(
     _template = `
         Answer the user's question from the following context: 
         Context {context}
@@ -163,4 +160,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDoc, createDocFromTxt, setPromptForDocs };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt };

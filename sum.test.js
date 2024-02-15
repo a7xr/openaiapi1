@@ -1,5 +1,5 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { setPromptForDocs, applyInputForChain, createDocFromTxt, createChainForDoc, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
 const {
   CommaSeparatedListOutputParser,
@@ -12,12 +12,17 @@ const { Document } = require ("@langchain/core/documents");
 /*
 Video 04
 */
-describe.only('Retrieval chains', () => {
+
+
+describe('Retrieval chains', () => {
   beforeEach(() => {
     config();
     load_model();
   })
-  describe('init_promptTemplateV1, createDoc, chain.invoke(', () => {
+
+  // The main idea here is,you provide an url of a web_page and that web_page MUST contain less than 4097 tokens
+  // - and this program is going to ask about the data in that web_page
+  describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template =   
@@ -27,7 +32,20 @@ describe.only('Retrieval chains', () => {
       );
       expect(p).toBe(true);
 
-      await createChainForDoc(
+    })
+  })
+
+  describe.only('init_promptTemplateV1, createDoc, chain.invoke(', () => {
+    it('Initialisation template from v1', async () => {
+      p = await init_promptTemplateV1(    
+        _template =   
+          `Answer the user's question from the following context: 
+          Context {context}
+          Question: {input}`,
+      );
+      expect(p).toBe(true);
+
+      await createChainForDocFromTemplV1(
         _template = `
           Answer the user's question from the following context: 
           Context {context}
@@ -44,8 +62,6 @@ describe.only('Retrieval chains', () => {
       const documentC = createDocFromTxt(
         _txt = "My name is name001",
       );
-
-      setPromptForDocs("What is my name ?")
       
       const response = await applyInputForChain(
         _input = "what is my name ? Give your answer in French", documentA, documentB, documentC
