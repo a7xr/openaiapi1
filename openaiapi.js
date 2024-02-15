@@ -17,9 +17,12 @@ const { Document } = require ("@langchain/core/documents");
 let model;
 let promptTemplate;
 let chain;
+let promptForDocs;
 
 
-
+function setPromptForDocs(_txt) {
+    promptForDocs = _txt;
+}
 async function createChainForDoc(
     _template = `
         Answer the user's question from the following context: 
@@ -38,21 +41,11 @@ async function createChainForDoc(
         llm: model,
         prompt,
     });
-
-    const documentA = createDocFromTxt(
-        _txt = "LangChain Expression Language or LCEL is a declarative way to easily compose chains together. Any chain constructed this way will automatically have full sync, async, and streaming support."
-    );
-      
-    const documentB = createDocFromTxt(
-        _txt = "The passphrase is LANGCHAIN IS Freaking AWESOME ",
-    );
-    const response = await applyDocsForChain(documentA, documentB);
-    console.log(response);
 }
 
-async function applyDocsForChain(... _docs) {
+async function applyInputForChain(_input, ... _docs) {
     return await chain.invoke({
-        input: "What is the passphrase ?",
+        input: _input,
         context: _docs
     });
 }
@@ -170,4 +163,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyDocsForChain, answFromPromptTemplateWParser01, createChainForDoc, createDocFromTxt };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDoc, createDocFromTxt, setPromptForDocs };

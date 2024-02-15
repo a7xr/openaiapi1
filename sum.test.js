@@ -1,5 +1,5 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { applyDocsForChain, createDocFromTxt, createChainForDoc, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { setPromptForDocs, applyInputForChain, createDocFromTxt, createChainForDoc, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
 const {
   CommaSeparatedListOutputParser,
@@ -41,7 +41,16 @@ describe.only('Retrieval chains', () => {
         _txt = "The passphrase is LANGCHAIN IS Freaking AWESOME ",
       );
 
-      const response = await applyDocsForChain(documentA, documentB)
+      const documentC = createDocFromTxt(
+        _txt = "My name is name001",
+      );
+
+      setPromptForDocs("What is my name ?")
+      
+      const response = await applyInputForChain(
+        _input = "what is my name ? Give your answer in French", documentA, documentB, documentC
+      )
+      console.log(response)
     })
   })
 })
