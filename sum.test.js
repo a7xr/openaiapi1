@@ -27,27 +27,12 @@ describe.only('Retrieval chains', () => {
       );
       expect(p).toBe(true);
 
-      createChainForDoc(
+      await createChainForDoc(
         _template = `
           Answer the user's question from the following context: 
           Context {context}
           Question: {input}`
       );
-
-      // const documentA = new Document({
-      //   pageContent:
-      //     "LangChain Expression Language or LCEL is a declarative way to easily compose chains together. Any chain constructed this way will automatically have full sync, async, and streaming support. ",
-      // });
-      
-      // const documentB = new Document({
-      //   pageContent: "The passphrase is LANGCHAIN IS AWESOME ",
-      // });
-
-      // const response = await chain.invoke({
-      //   input: "What is the passphrase ?",
-      //   context: [documentA, documentB]
-      // });
-      // console.log(response);
     })
   })
 })

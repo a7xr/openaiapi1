@@ -10,12 +10,15 @@ const {
   } = require("@langchain/core/output_parsers");
 const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 const {z} = require("zod");
+const { Document } = require ("@langchain/core/documents");
 
 // const path = require('path');
 
 let model;
 let promptTemplate;
 let chain;
+
+
 
 async function createChainForDoc(
     _template = `
@@ -31,10 +34,30 @@ async function createChainForDoc(
     // console.log("prompt: ", prompt)
     // console.log("promptTemplate: ", promptTemplate)
 
-
     chain = await createStuffDocumentsChain({
         llm: model,
         prompt,
+    });
+
+    const documentA = createDocFromTxt(
+        _txt = "LangChain Expression Language or LCEL is a declarative way to easily compose chains together. Any chain constructed this way will automatically have full sync, async, and streaming support."
+    );
+      
+    const documentB = createDocFromTxt(
+        _txt = "The passphrase is LANGCHAIN IS Freaking AWESOME ",
+    );
+    const response = await chain.invoke({
+        input: "What is the passphrase ?",
+        context: [documentA, documentB]
+    });
+    console.log(response);
+}
+
+function createDocFromTxt(
+        _txt = "LangChain Expression Language or LCEL is a declarative way to easily compose chains together. Any chain constructed this way will automatically have full sync, async, and streaming support."
+) {
+    return new Document({
+        pageContent:  _txt,
     });
 }
 
