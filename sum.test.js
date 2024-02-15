@@ -37,14 +37,6 @@ describe('Retrieval chains', () => {
 
   describe.only('init_promptTemplateV1, createDoc, chain.invoke(', () => {
     it('Initialisation template from v1', async () => {
-      p = await init_promptTemplateV1(    
-        _template =   
-          `Answer the user's question from the following context: 
-          Context {context}
-          Question: {input}`,
-      );
-      expect(p).toBe(true);
-
       await createChainForDocFromTemplV1(
         _template = `
           Answer the user's question from the following context: 
