@@ -46,11 +46,15 @@ async function createChainForDoc(
     const documentB = createDocFromTxt(
         _txt = "The passphrase is LANGCHAIN IS Freaking AWESOME ",
     );
-    const response = await chain.invoke({
-        input: "What is the passphrase ?",
-        context: [documentA, documentB]
-    });
+    const response = await applyDocsForChain(documentA, documentB);
     console.log(response);
+}
+
+async function applyDocsForChain(... _docs) {
+    return await chain.invoke({
+        input: "What is the passphrase ?",
+        context: _docs
+    });
 }
 
 function createDocFromTxt(
@@ -166,4 +170,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, answFromPromptTemplateWParser01, createChainForDoc };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyDocsForChain, answFromPromptTemplateWParser01, createChainForDoc, createDocFromTxt };

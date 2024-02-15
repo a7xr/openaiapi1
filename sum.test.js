@@ -1,5 +1,5 @@
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { createChainForDoc, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { applyDocsForChain, createDocFromTxt, createChainForDoc, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
 const {
   CommaSeparatedListOutputParser,
@@ -33,6 +33,15 @@ describe.only('Retrieval chains', () => {
           Context {context}
           Question: {input}`
       );
+      const documentA = createDocFromTxt(
+        _txt = "LangChain Expression Language or LCEL is a declarative way to easily compose chains together. Any chain constructed this way will automatically have full sync, async, and streaming support."
+      );
+        
+      const documentB = createDocFromTxt(
+        _txt = "The passphrase is LANGCHAIN IS Freaking AWESOME ",
+      );
+
+      const response = await applyDocsForChain(documentA, documentB)
     })
   })
 })
