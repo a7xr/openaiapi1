@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "dev": "nodemon run app.js",
-    "test": "NODE_OPTIONS=--max_old_space_size=16384 jest --detectOpenHandles"
+    "test": "mocha *.test.js"
+    
   },
   "keywords": [],
   "author": "",
