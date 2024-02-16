@@ -18,7 +18,26 @@ const { Document } = require ("@langchain/core/documents");
 let model;
 let promptTemplate;
 let chain;
-let promptForDocs;
+
+async function createDocFromUrl(
+    _url = "https://js.langchain.com/docs/expression_language/"
+) {
+    const prompt = ChatPromptTemplate.fromTemplate(
+        `Answer the user's question from the following context: 
+        Context {context}
+        Question: {input}`
+    );
+    const chain = await createStuffDocumentsChain({
+        llm: model,
+        prompt,
+    });
+    const loader = new CheerioWebBaseLoader(
+        "https://js.langchain.com/docs/expression_language/"
+        );
+    const docs = await loader.load();
+    console.log('This is a test')
+    // console.log(docs)
+}
 
 async function createChainForDocFromTemplV1(
     _template = `
@@ -38,6 +57,7 @@ async function createChainForDocFromTemplV1(
         llm: model,
         prompt,
     });
+    return true;
 }
 
 async function applyInputForChain(_input, ... _docs) {
@@ -160,4 +180,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt };
+module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt, createDocFromUrl };

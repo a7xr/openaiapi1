@@ -1,41 +1,64 @@
+const { CheerioWebBaseLoader } = require ("langchain/document_loaders/web/cheerio");
+// import * as dotenv from "dotenv";
+const dotenv = require('dotenv');
+const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
+const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { createDocFromUrl, applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
+
 const {
   CommaSeparatedListOutputParser,
   StringOutputParser,
   BaseOutputParser,
 } = require("@langchain/core/output_parsers");
+const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 const {z} = require("zod");
 const { Document } = require ("@langchain/core/documents");
+
 
 /*
 Video 04
 */
 
 
-describe('Retrieval chains', () => {
+describe.only('Retrieval chains', () => {
   beforeEach(() => {
     config();
     load_model();
   })
 
+  // describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
+    it(':/ ', async () => {
+      const prompt = ChatPromptTemplate.fromTemplate(
+        `Answer the user's question from the following context: 
+        Context {context}
+        Question: {input}`
+      );
+      const model = new ChatOpenAI({
+        modelName: "gpt-3.5-turbo",
+        temperature: 0.9,
+      });
+      require('os').__setCpus({length: 4});
+      const loader = new CheerioWebBaseLoader(
+        "https://js.langchain.com/docs/expression_language/"
+      );
+      const docs = await loader.load();
+    })
+  // })
+
   // The main idea here is,you provide an url of a web_page and that web_page MUST contain less than 4097 tokens
   // - and this program is going to ask about the data in that web_page
   describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
-    it('Initialisation template from v1', async () => {
-      p = await init_promptTemplateV1(    
-        _template =   
-          `Answer the user's question from the following context: 
-          Context {context}
-          Question: {input}`,
-      );
-      expect(p).toBe(true);
+    it(':/ ', async () => {
+      // output:  RUNS  ./sum.test.js
+      // Segmentation fault (core dumped)
+      await createDocFromUrl()
 
     })
   })
 
-  describe.only('init_promptTemplateV1, createDoc, chain.invoke(', () => {
+  describe('init_promptTemplateV1, createDoc, chain.invoke(', () => {
     it('Initialisation template from v1', async () => {
       await createChainForDocFromTemplV1(
         _template = `
