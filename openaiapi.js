@@ -19,6 +19,10 @@ let model;
 let promptTemplate;
 let chain;
 
+async function createToolsToSplitWebContent(_docs) {
+    
+}
+
 async function createDocFromUrl(
     _url = "https://js.langchain.com/docs/expression_language/"
 ) {

@@ -22,29 +22,27 @@ Video 04
 
 
 describe('Retrieval chains', () => {
-  beforeEach(() => {
+  beforeEach(async() => {
     assert.equal(config(), true, "config() is not true");
     assert.equal(load_model(), true, "load_model() is not true");
+
+    p = await init_promptTemplateV1(    
+      _template = `Answer the user's question from the following context: 
+      Context {context}
+      Question: {input}`,
+    );
+    assert.equal(p, true, "p is not true");
+    docs_ = await createDocFromUrl(
+      _url = "https://js.langchain.com/docs/expression_language/"
+    )
   })
 
   describe('Ask about an url,', () => {
     it.only('The webpage in that url should be less than 4097tokens', async () => {
-      // const prompt = ChatPromptTemplate.fromTemplate(
-      //   `Answer the user's question from the following context: 
-      //   Context {context}
-      //   Question: {input}`
-      // );
-      p = await init_promptTemplateV1(    
-        _template = `Answer the user's question from the following context: 
-        Context {context}
-        Question: {input}`,
-      );
-      assert.equal(p, true, "p is not true");
-
-      docs_ = await createDocFromUrl(
-        _url = "https://js.langchain.com/docs/expression_language/"
-      )
       assert(Array.isArray(docs_), 'docs_ should be an array');
+    })
+    it.only('the content of the url is going to be divided', async () => {
+
     })
   })
 
