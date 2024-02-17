@@ -155,7 +155,8 @@ config() and load_model(x, x) are mandatory on all videos
 function config(){
     // const envPath = path.resolve(__dirname, '../.env');
     // return dotenv.config({ path: envPath });
-    return dotenv.config();
+    dotenv.config();
+    return true;
 }
 
 /*
@@ -169,7 +170,7 @@ function load_model(
       modelName: _modelName,
       temperature: _temperature,
     });
-    return model;
+    return true;
 } 
 
 /*
