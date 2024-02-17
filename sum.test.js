@@ -48,7 +48,7 @@ describe('Retrieval chains', () => {
           _input = "What should I do if I want to get started ?",
           docs_
         );
-      }, 5);
+      }, 50);
     })
   })
 

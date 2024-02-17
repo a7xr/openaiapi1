@@ -31,6 +31,7 @@ async function createToolsToSplitWebContent(
         chunkSize: 100,
         chunkOverlap: 20,
     });
+    console.log('qmsdlkfjzaeoiru')
     const splitDocs = await splitter.splitDocuments(_docs);
     const embeddings = new OpenAIEmbeddings();
     const vectorstore = await MemoryVectorStore.fromDocuments(
@@ -42,20 +43,36 @@ async function createToolsToSplitWebContent(
         combineDocsChain: chain,
         retriever,
     });
-    const response = await retrievalChain.invoke({
+    let response = await retrievalChain.invoke({
         input: _input,
         context: _docs
     });
     const outputParser = new StringOutputParser();
-    const rawResponse = await retrievalChain.invoke({
+    let rawResponse = await retrievalChain.invoke({
         input: _input,
         context: _docs
     });
-    response = outputParser.parse(rawResponse);
-
-    console.log(response)
-    return response
-    console.log(typeof response)
+    try {
+        console.log('RawResponse: ', rawResponse)
+        console.log('--------------------------------------------------------------')
+        response = outputParser.parse(rawResponse);
+        console.log('Response: ', response)
+        console.log('--------------------------------------------------------------')
+        
+        let strLet;
+        response.then(res => {
+            // Ici, 'response' est l'objet résolu de la promesse
+            strLet = res.answer
+            console.log(typeof strLet); // Affiche la section 'answer' de l'objet
+        }).catch(error => {
+            // Gérer les erreurs ici
+            console.error("Une erreur s'est produite :", error);
+        });
+        return response
+        console.log(typeof response)
+    }catch(error){
+        console.error('Erreur lors du traitement de la réponse:', error);
+    }
 }
 
 async function createDocFromUrl(
