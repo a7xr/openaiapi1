@@ -4,7 +4,7 @@ const assert = require('assert');
 
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
-const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
+const { sum, multiply, asyncMultiply, throwErrorqmsdlkfjzaeoiru, getArray } = require('./sum');
 const { createToolsToSplitWebContent, createDocFromUrl, applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
 
@@ -16,11 +16,11 @@ const {
 const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 
 
+
+
 /*
 Video 04
 */
-
-
 describe('Retrieval chains', () => {
   let docs_;
   beforeEach(async() => {
@@ -34,7 +34,8 @@ describe('Retrieval chains', () => {
         Question: {input}`
     );
     docs_ = await createDocFromUrl(
-      _url = "https://js.langchain.com/docs/expression_language/"
+      // _url = "https://js.langchain.com/docs/expression_language/"
+      _url = "https://www.nbcnews.com/news/world/live-blog/israel-hamas-war-live-updates-rcna139320"
     )
   })
 
@@ -45,23 +46,14 @@ describe('Retrieval chains', () => {
     it.only('the content of the url is going to be divided', async () => {
       setTimeout(function() {
         createToolsToSplitWebContent(
-          _input = "What should I do if I want to get started ?",
+          _input = "What did Yoav Gallant say ?",
           docs_
         );
       }, 50);
     })
   })
 
-  // The main idea here is,you provide an url of a web_page and that web_page MUST contain less than 4097 tokens
-  // - and this program is going to ask about the data in that web_page
-  describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
-    it(':/ ', async () => {
-      // output:  RUNS  ./sum.test.js
-      // Segmentation fault (core dumped)
-      await createDocFromUrl()
 
-    })
-  })
 
   describe('init_promptTemplateV1, createDoc, chain.invoke(', () => {
     it('Initialisation template from v1', async () => {
