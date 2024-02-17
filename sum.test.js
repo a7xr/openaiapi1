@@ -5,7 +5,7 @@ const assert = require('assert');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
-const { createDocFromUrl, applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { createToolsToSplitWebContent, createDocFromUrl, applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
 
 const {
@@ -22,27 +22,33 @@ Video 04
 
 
 describe('Retrieval chains', () => {
+  let docs_;
   beforeEach(async() => {
     assert.equal(config(), true, "config() is not true");
     assert.equal(load_model(), true, "load_model() is not true");
 
-    p = await init_promptTemplateV1(    
-      _template = `Answer the user's question from the following context: 
-      Context {context}
-      Question: {input}`,
+    await createChainForDocFromTemplV1(
+      _template = `
+        Answer the user's question from the following context: 
+        Context {context}
+        Question: {input}`
     );
-    assert.equal(p, true, "p is not true");
     docs_ = await createDocFromUrl(
       _url = "https://js.langchain.com/docs/expression_language/"
     )
   })
 
   describe('Ask about an url,', () => {
-    it.only('The webpage in that url should be less than 4097tokens', async () => {
+    it('The webpage in that url should be less than 4097tokens', async () => {
       assert(Array.isArray(docs_), 'docs_ should be an array');
     })
     it.only('the content of the url is going to be divided', async () => {
-
+      setTimeout(function() {
+        createToolsToSplitWebContent(
+          _input = "What should I do if I want to get started ?",
+          docs_
+        );
+      }, 5);
     })
   })
 

@@ -12,6 +12,10 @@ const {
 const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 const {z} = require("zod");
 const { Document } = require ("@langchain/core/documents");
+const { RecursiveCharacterTextSplitter } = require ("langchain/text_splitter");
+const { OpenAIEmbeddings } = require ("@langchain/openai");
+const { MemoryVectorStore } = require ("langchain/vectorstores/memory");
+const { createRetrievalChain } = require ("langchain/chains/retrieval");
 
 // const path = require('path');
 
@@ -19,15 +23,46 @@ let model;
 let promptTemplate;
 let chain;
 
-async function createToolsToSplitWebContent(_docs) {
-    
+async function createToolsToSplitWebContent(
+        _input = "Where should I check if I'm looking for a good place to get started ?", 
+        _docs
+) {
+    const splitter = new RecursiveCharacterTextSplitter({
+        chunkSize: 100,
+        chunkOverlap: 20,
+    });
+    const splitDocs = await splitter.splitDocuments(_docs);
+    const embeddings = new OpenAIEmbeddings();
+    const vectorstore = await MemoryVectorStore.fromDocuments(
+        splitDocs,
+        embeddings
+    );
+    const retriever = vectorstore.asRetriever({ k: 2 });
+    const retrievalChain = await createRetrievalChain({
+        combineDocsChain: chain,
+        retriever,
+    });
+    const response = await retrievalChain.invoke({
+        input: _input,
+        context: _docs
+    });
+    const outputParser = new StringOutputParser();
+    const rawResponse = await retrievalChain.invoke({
+        input: _input,
+        context: _docs
+    });
+    response = outputParser.parse(rawResponse);
+
+    console.log(response)
+    return response
+    console.log(typeof response)
 }
 
 async function createDocFromUrl(
     _url = "https://js.langchain.com/docs/expression_language/"
 ) {
     const loader = new CheerioWebBaseLoader(
-        "https://js.langchain.com/docs/expression_language/"
+        _url
     );
     const docs = await loader.load();
     return docs;
@@ -139,7 +174,6 @@ async function init_promptTemplateV1(
     _template = 'Tell a joke about {word}', 
 ) {
     promptTemplate = ChatPromptTemplate.fromTemplate(_template);
-    // return await promptTemplate.format(_changeInTemplate);
     return true;
 }
 
@@ -175,4 +209,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt, createDocFromUrl };
+module.exports = { createToolsToSplitWebContent, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt, createDocFromUrl };
