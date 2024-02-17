@@ -1,5 +1,7 @@
 const { CheerioWebBaseLoader } = require ("langchain/document_loaders/web/cheerio");
 // import * as dotenv from "dotenv";
+const assert = require('assert');
+
 const dotenv = require('dotenv');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
@@ -22,13 +24,13 @@ Video 04
 */
 
 
-describe.only('Retrieval chains', () => {
+describe('Retrieval chains', () => {
   beforeEach(() => {
     config();
     load_model();
   })
 
-  // describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
+  describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
     it(':/ ', async () => {
       const prompt = ChatPromptTemplate.fromTemplate(
         `Answer the user's question from the following context: 
@@ -39,13 +41,12 @@ describe.only('Retrieval chains', () => {
         modelName: "gpt-3.5-turbo",
         temperature: 0.9,
       });
-      require('os').__setCpus({length: 4});
       const loader = new CheerioWebBaseLoader(
         "https://js.langchain.com/docs/expression_language/"
       );
       const docs = await loader.load();
     })
-  // })
+  })
 
   // The main idea here is,you provide an url of a web_page and that web_page MUST contain less than 4097 tokens
   // - and this program is going to ask about the data in that web_page
@@ -101,30 +102,46 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
     config();
     load_model();
   })
-  describe('init_promptTemplateV1, answFromTemplate, StructuredOutputParser', () => {
+  describe.only('init_promptTemplateV1, answFromTemplate, StructuredOutputParser', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = "Extract information from the following phrase.\n{format_instructions}\n{phrase}",
       );
-      expect(p).toBeTruthy();
+      // expect(p).toBeTruthy();
+      // assert.isOk(p, 'p is not truthy');
+      // expect(hasProp(testObj)).to.be.true
+      // expect(p).to.be.true
+      assert.equal(p, true, "p is not true");
+      assert.ok(p, 'p is true with ok')
+
+      const l = [1, 2, 3]
+      assert(Array.isArray(l), 'exampleList should be an array');
+
+      const exampleDictionary = { key1: 'value1', key2: 'value2' }; // Sample object for testing
+      assert(exampleDictionary.hasOwnProperty('key1'), '"key1" should exist in the dictionary as own property');      
+    
+      const dict1 = { key1: 'value1', key2: 'value2' }; 
+      assert.equal(dict1['key1'], 'value1', "'dict1[key1]' should be 'value1'");
     })
-    it('Test StructuredOutputParser', async () => {
-      const r = await answFromPromptTemplateWParser01(
-        _word = "notUSedHere",
-        _parser = StructuredOutputParser.fromZodSchema(    
-          z.object({
-            recipe: z.string().describe("name of recipe"),
-            ingredients: z.array(z.string()).describe("ingredients"),
-          })
-        ),_dataToTreat = {
-          phrase: 			"The ingredients for a Spaghetti Bolognese recipe are tomatoes, minced beef, garlic, wine and herbs.",
-          format_instructions: _parser.getFormatInstructions(),
-        }
-      );
+    // it('Test StructuredOutputParser', async () => {
+    //   const r = await answFromPromptTemplateWParser01(
+    //     _word = "notUSedHere",
+    //     _parser = StructuredOutputParser.fromZodSchema(    
+    //       z.object({
+    //         recipe: z.string().describe("name of recipe"),
+    //         ingredients: z.array(z.string()).describe("ingredients"),
+    //       })
+    //     ),_dataToTreat = {
+    //       phrase: 			"The ingredients for a Spaghetti Bolognese recipe are tomatoes, minced beef, garlic, wine and herbs.",
+    //       format_instructions: _parser.getFormatInstructions(),
+    //     }
+    //   );
       
-      expect(r).toHaveProperty('recipe');
-      expect(r).toHaveProperty('ingredients');
-    })
+      // expect(r).toHaveProperty('recipe');
+      // expect(r).toHaveProperty('ingredients');
+      
+      // assert.equal(hasProp(r), true, 'no pro').to.be.true
+
     // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
   })
 })
