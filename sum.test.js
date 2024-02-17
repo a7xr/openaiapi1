@@ -2,7 +2,6 @@ const { CheerioWebBaseLoader } = require ("langchain/document_loaders/web/cheeri
 // import * as dotenv from "dotenv";
 const assert = require('assert');
 
-const dotenv = require('dotenv');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
 const { sum, multiply, asyncMultiply, throwError, getArray } = require('./sum');
@@ -15,8 +14,6 @@ const {
   BaseOutputParser,
 } = require("@langchain/core/output_parsers");
 const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
-const {z} = require("zod");
-const { Document } = require ("@langchain/core/documents");
 
 
 /*
@@ -102,15 +99,11 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
     config();
     load_model();
   })
-  describe.only('init_promptTemplateV1, answFromTemplate, StructuredOutputParser', () => {
+  describe('init_promptTemplateV1, answFromTemplate, StructuredOutputParser', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = "Extract information from the following phrase.\n{format_instructions}\n{phrase}",
       );
-      // expect(p).toBeTruthy();
-      // assert.isOk(p, 'p is not truthy');
-      // expect(hasProp(testObj)).to.be.true
-      // expect(p).to.be.true
       assert.equal(p, true, "p is not true");
       assert.ok(p, 'p is true with ok')
 
@@ -137,9 +130,6 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
     //     }
     //   );
       
-      // expect(r).toHaveProperty('recipe');
-      // expect(r).toHaveProperty('ingredients');
-      
       // assert.equal(hasProp(r), true, 'no pro').to.be.true
 
     // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
@@ -161,7 +151,7 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
           Formatting Instructions: {format_instructions}
           Phrase: {phrase}`,
       );
-      expect(p).toBe(true);
+      assert.ok(p, 'p is not true')
     })
     it('Test StructuredOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
@@ -175,9 +165,12 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
           format_instructions: _parser.getFormatInstructions()
         }
       );
-      expect(r).toHaveProperty('name');
-      expect(r).toHaveProperty('age');
-      expect(r.name).toBe('Max'); 
+
+      assert(r.hasOwnProperty('name'), '"name" should exist in the dictionary as own property');
+      assert(r.hasOwnProperty('age'), '"age" should exist in the dictionary as own property');
+      
+      // expect(r.name).toBe('Max'); 
+      assert.equal(r['name'], 'Max', "'dict1[key1]' should be 'value1'");
     })
     // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
   })
@@ -195,36 +188,32 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
       p = await init_promptTemplateV1(    
         _template = 'Tell a joke about {word}',
       );
-      expect(p).toBe(true);
+      assert.equal(p, true, "p is not true");
     })
     it('Test CommaSeparatedListOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
         _word = "dinosaurs",
         _parser = new CommaSeparatedListOutputParser()
       );
-      console.log("from Test CommaSeparatedListOutputParser");
       console.log(r);
-      expect(Array.isArray(r)).toBeTruthy();
+      assert(Array.isArray(r), 'r should be an array');
     })
   })
-  // describe('init_promptTemplateV2, answFromTemplate, StringOutputParser', () => {
-    
-  // })
+  
   describe('init_promptTemplateV1, answFromTemplate, StringOutputParser', () => {
     it('Initialisation template from v1', async () => {
       p = await init_promptTemplateV1(    
         _template = 'Tell a joke about {word}',
       );
-      expect(p).toBe(true);
+      assert.equal(p, true, "p is not true");
     })
     it('Test StringOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
         _word = "dinosaurs",
         _parser = new StringOutputParser()
       );
-      console.log("from Test StringOutputParser");
       console.log(r);
-      expect(typeof r).toBe('string');
+      assert.strictEqual(typeof r, 'string');
     })
   })
   describe('init_promptTemplateV2, answFromTemplate, StringOutputParser', () => {
@@ -232,16 +221,15 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StringOutputParser)', 
       p = await init_promptTemplateV2(    
         _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
       );
-      expect(p).toBe(true);
+      assert.equal(p, true, "p is not true");
     })
     it('Test StringOutputParser', async () => {
       const r = await answFromPromptTemplateWParser01(
         _word = "dinosaurs",
         _parser = new StringOutputParser()
       );
-      console.log("from Test StringOutputParser");
       console.log(r);
-      expect(typeof r).toBe('string');
+      assert.strictEqual(typeof r, 'string');
     })
   })
 })
@@ -256,13 +244,12 @@ describe('Mixing init_promptTemplateX and answFromTemplate', () => {
       p = await init_promptTemplateV1(    
         _template = 'Tell a joke about {word}',
       );
-      expect(p).toBe(true);
+      assert.equal(p, true, "p is not true");
     });
     it('Get answer', async () => {
       const r = await answFromPromptTemplate(_word = "dinosaurs");
-      console.log("from init_promptTemplateV1");
       console.log(r);
-      expect(typeof r).toBe('string');
+      assert.strictEqual(typeof r, 'string');
     })
   })
   describe('init_promptTemplateV2, answFromTemplate', () => {
@@ -271,36 +258,35 @@ describe('Mixing init_promptTemplateX and answFromTemplate', () => {
       p = await init_promptTemplateV2( 
         _template = "You are a talented chef.  Create a recipe based on a main ingredient provided by the user in 25words."
       );
-      expect(p).toBe(true);
+      assert.equal(p, true, "p is not true");
     });
     it('Get answer', async () => {
       const r = await answFromPromptTemplate(word = "mangoes");
-      console.log("from init_promptTemplateV2");
       console.log(r);
-      expect(typeof r).toBe('string');
+      assert.strictEqual(typeof r, 'string');
     })
   })
 })
 
 describe('Basic', () => {
   it('loading the configuration', () => {
-    expect(config()).toBeTruthy();
+    // expect(config()).toBeTruthy();
+    assert.equal(config(), true, "p is not true");
   });
   it('loading the model', () => {
-    expect(load_model()).toBeTruthy();
+    assert.equal(load_model(), true, "load_model is not true");
   });
 
   it('Chat completion', async () => {
     res = await chat_completion(_text='tell me a joke about cat? tell it in 10characters max');
-    console.log('From Chat Completion')
     console.log(res);
-    expect(typeof res).toBe('string');
+    assert.strictEqual(typeof res, 'string');
   });
 
 });
 
 
-// // const { config } = require('./openaiapi');
+
 
 // describe('Not synchrone fn', () => {
 //   it('adds 1 + 2 to equal 3', () => {
