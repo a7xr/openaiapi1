@@ -22,21 +22,11 @@ let chain;
 async function createDocFromUrl(
     _url = "https://js.langchain.com/docs/expression_language/"
 ) {
-    const prompt = ChatPromptTemplate.fromTemplate(
-        `Answer the user's question from the following context: 
-        Context {context}
-        Question: {input}`
-    );
-    const chain = await createStuffDocumentsChain({
-        llm: model,
-        prompt,
-    });
     const loader = new CheerioWebBaseLoader(
         "https://js.langchain.com/docs/expression_language/"
-        );
+    );
     const docs = await loader.load();
-    console.log('This is a test')
-    // console.log(docs)
+    return docs;
 }
 
 async function createChainForDocFromTemplV1(

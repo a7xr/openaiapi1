@@ -23,25 +23,28 @@ Video 04
 
 describe('Retrieval chains', () => {
   beforeEach(() => {
-    config();
-    load_model();
+    assert.equal(config(), true, "config() is not true");
+    assert.equal(load_model(), true, "load_model() is not true");
   })
 
-  describe('Ask about an url, the webpage in that url should be less than 4097tokens', () => {
-    it(':/ ', async () => {
-      const prompt = ChatPromptTemplate.fromTemplate(
-        `Answer the user's question from the following context: 
+  describe('Ask about an url,', () => {
+    it.only('The webpage in that url should be less than 4097tokens', async () => {
+      // const prompt = ChatPromptTemplate.fromTemplate(
+      //   `Answer the user's question from the following context: 
+      //   Context {context}
+      //   Question: {input}`
+      // );
+      p = await init_promptTemplateV1(    
+        _template = `Answer the user's question from the following context: 
         Context {context}
-        Question: {input}`
+        Question: {input}`,
       );
-      const model = new ChatOpenAI({
-        modelName: "gpt-3.5-turbo",
-        temperature: 0.9,
-      });
-      const loader = new CheerioWebBaseLoader(
-        "https://js.langchain.com/docs/expression_language/"
-      );
-      const docs = await loader.load();
+      assert.equal(p, true, "p is not true");
+
+      docs_ = await createDocFromUrl(
+        _url = "https://js.langchain.com/docs/expression_language/"
+      )
+      assert(Array.isArray(docs_), 'docs_ should be an array');
     })
   })
 
