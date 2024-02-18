@@ -17,43 +17,6 @@ const {
 const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 
 
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-function action1() {
-  console.log('Action1 executed');
-  // Add your action code here
-}
-
-function promptUser() {
-  rl.question('Type something (or "exit" to quit): ', (answer) => {
-    if (answer.toLowerCase() === 'exit') {
-      rl.close();
-    } else if (answer.toLowerCase() === 'goanyway') {
-      action1();
-      promptUser(); // Ask for input again
-    } else {
-      promptUser(); // Ask for input again
-    }
-  });
-}
-promptUser();
-
-// Close the readline interface when done
-rl.on('close', () => {
-  console.log('Exiting...');
-});
-
-
-
-describe('Ask about an url,', () => {
-  it.only('The webpage in that url should be less than 4097tokens', async () => {
-    console.log('Hello')
-  })
-})
-
 /*
 Video 04
 */
@@ -77,15 +40,48 @@ describe('Retrieval chains', () => {
 
   describe('Ask about an url,', () => {
     it('The webpage in that url should be less than 4097tokens', async () => {
+      docs_ = await createDocFromUrl(
+        _url = "https://js.langchain.com/docs/expression_language/"
+        // _url = "https://www.nbcnews.com/news/world/live-blog/israel-hamas-war-live-updates-rcna139320"
+      )
       assert(Array.isArray(docs_), 'docs_ should be an array');
     })
-    it('the content of the url is going to be divided', async () => {
-      setTimeout(function() {
-        createToolsToSplitWebContent(
-          _input = "What did Yoav Gallant say ?",
-          docs_
-        );
-      }, 50);
+    it.only('the content of the url is going to be splitted bcz it is very long', async () => {
+      
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+      async function action1() {
+        docs_ = await createDocFromUrl(
+          // _url = "https://js.langchain.com/docs/expression_language/"
+          _url = "https://www.nbcnews.com/news/world/live-blog/israel-hamas-war-live-updates-rcna139320"
+        )
+        setTimeout(function() {
+          createToolsToSplitWebContent(
+            _input = "What did Yoav Gallant say ?",
+            docs_
+          );
+        }, 50);
+      }
+      function promptUser() {
+        const msg_ = "Splitting long webpage consumes a lot of API, type \"exit\" or \"goanyway\": "
+        rl.question(msg_, async (answer) => {
+          if (answer.toLowerCase() === 'exit') {
+            rl.close();
+          } else if (answer.toLowerCase() === 'goanyway') {
+            await action1();
+            promptUser(); // Ask for input again
+          } else {
+            promptUser(); // Ask for input again
+          }
+        });
+      }
+      promptUser();
+      // Close the readline interface when done
+      rl.on('close', () => {
+        console.log('Exiting...');
+      });
     })
   })
 
