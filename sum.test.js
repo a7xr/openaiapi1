@@ -6,8 +6,13 @@ const assert = require('assert');
 const ChatOpenAI = require('@langchain/openai').ChatOpenAI;
 const {ChatPromptTemplate} = require("@langchain/core/prompts") ;
 const { sum, multiply, asyncMultiply, throwErrorqmsdlkfjzaeoiru, getArray } = require('./sum');
-const { createToolsToSplitWebContent, createDocFromUrl, applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
+const { createVectorStore, createChain, createToolsToSplitWebContent, createDocFromUrl, applyInputForChain, createDocFromTxt, createChainForDocFromTemplV1, answFromPromptTemplateWParser01, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate } = require('./openaiapi');
 const { StructuredOutputParser } = require ("langchain/output_parsers");
+
+// const { RecursiveCharacterTextSplitter } = require ("langchain/text_splitter");
+// const { OpenAIEmbeddings } = require ("@langchain/openai");
+// const { MemoryVectorStore } = require ("langchain/vectorstores/memory");
+// const { createRetrievalChain } = require ("langchain/chains/retrieval");
 
 const {
   CommaSeparatedListOutputParser,
@@ -16,6 +21,35 @@ const {
 } = require("@langchain/core/output_parsers");
 const { createStuffDocumentsChain } = require ("langchain/chains/combine_documents");
 
+
+/*
+*/
+describe.only('Memory discussion', () => {
+  beforeEach(() => {
+    config();
+    load_model();
+  })
+  it('Preparing for Memory discussion', async () => {
+
+    setTimeout(async() => {
+      try {
+        const vectorStore = await createVectorStore(
+          _url = 'https://js.langchain.com/docs/expression_language/'
+        );
+        const chain = await createChain(vectorStore);
+
+        const response = await chain.invoke({
+          input: "What is LCEL?",
+        });
+        
+        console.log(response.answer);
+        assert.strictEqual(typeof response.answer, 'string');
+      }catch(error) {
+        console.error('Erreur lors du traitement de la réponse:', error);
+      }
+    }, 1);
+  })
+})
 
 /*
 Video 04
@@ -159,23 +193,6 @@ describe('Mixing init_promptTemplateX, answFromTemplate, (StructuredOutputParser
       const dict1 = { key1: 'value1', key2: 'value2' }; 
       assert.equal(dict1['key1'], 'value1', "'dict1[key1]' should be 'value1'");
     })
-    // it('Test StructuredOutputParser', async () => {
-    //   const r = await answFromPromptTemplateWParser01(
-    //     _word = "notUSedHere",
-    //     _parser = StructuredOutputParser.fromZodSchema(    
-    //       z.object({
-    //         recipe: z.string().describe("name of recipe"),
-    //         ingredients: z.array(z.string()).describe("ingredients"),
-    //       })
-    //     ),_dataToTreat = {
-    //       phrase: 			"The ingredients for a Spaghetti Bolognese recipe are tomatoes, minced beef, garlic, wine and herbs.",
-    //       format_instructions: _parser.getFormatInstructions(),
-    //     }
-    //   );
-      
-      // assert.equal(hasProp(r), true, 'no pro').to.be.true
-
-    // There is NO init_promptTemplateV2 for answFromPromptTemplateWParser01
   })
 })
 

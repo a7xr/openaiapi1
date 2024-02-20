@@ -23,6 +23,59 @@ let model;
 let promptTemplate;
 let chain;
 
+async function createVectorStore(
+    _url = 'https://js.langchain.com/docs/expression_language/'
+) {
+  const loader = new CheerioWebBaseLoader(
+    _url
+  );
+  const docs = await loader.load();
+
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 100,
+    chunkOverlap: 20,
+  });
+
+  const splitDocs = await splitter.splitDocuments(docs);
+
+  const embeddings = new OpenAIEmbeddings();
+
+  const vectorstore = await MemoryVectorStore.fromDocuments(
+    splitDocs,
+    embeddings
+  );
+
+  return vectorstore;
+}
+  
+async function createChain(vectorStore) {
+  const model = new ChatOpenAI({
+    modelName: "gpt-3.5-turbo",
+    temperature: 0.7,
+  });
+
+  const prompt = ChatPromptTemplate.fromTemplate(
+    `Answer the user's question from the following context: 
+    {context}
+    Question: {input}`
+  );
+//   const outputParser = new StringOutputParser();
+  const chain = await createStuffDocumentsChain({
+    llm: model,
+    prompt,
+  });
+
+  const retriever = vectorStore.asRetriever({ k: 2 });
+
+  const conversationChain = await createRetrievalChain({
+    combineDocsChain: chain,
+    retriever,
+  });
+
+  return conversationChain;
+}
+
+
 async function createToolsToSplitWebContent(
         _input = "Where should I check if I'm looking for a good place to get started ?", 
         _docs
@@ -226,4 +279,4 @@ async function chat_completion(_text='what is your name? tell it in 10characters
     return response.content;
 }
 
-module.exports = { createToolsToSplitWebContent, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt, createDocFromUrl };
+module.exports = { createVectorStore, createChain, createToolsToSplitWebContent, config, load_model, chat_completion, init_promptTemplateV1, init_promptTemplateV2, answFromPromptTemplate, applyInputForChain, answFromPromptTemplateWParser01, createChainForDocFromTemplV1, createDocFromTxt, createDocFromUrl };
