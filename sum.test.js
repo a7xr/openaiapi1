@@ -20,7 +20,7 @@ const { createStuffDocumentsChain } = require ("langchain/chains/combine_documen
 /*
 Video 04
 */
-describe('Retrieval chains', () => {
+describe.skip('Retrieval chains', () => {
   let docs_;
   beforeEach(async() => {
     assert.equal(config(), true, "config() is not true");
@@ -38,7 +38,7 @@ describe('Retrieval chains', () => {
     )
   })
 
-  describe('Ask about an url,', () => {
+  describe.skip('Ask about an url,', () => {
     it('The webpage in that url should be less than 4097tokens', async () => {
       docs_ = await createDocFromUrl(
         _url = "https://js.langchain.com/docs/expression_language/"
@@ -46,7 +46,20 @@ describe('Retrieval chains', () => {
       )
       assert(Array.isArray(docs_), 'docs_ should be an array');
     })
-    it.only('the content of the url is going to be splitted bcz it is very long', async () => {
+    it.skip('the content of the url is going to be splitted bcz it is very long, >>>>>Warning<<<<<: This is API Consuming', async () => {
+      docs_ = await createDocFromUrl(
+        _url = "https://www.nbcnews.com/news/world/live-blog/israel-hamas-war-live-updates-rcna139320"
+      )
+      let res_ = '';
+      setTimeout(function() {
+        res_ = createToolsToSplitWebContent(
+          _input = "What did Yoav Gallant say ?",
+          docs_
+        );
+      }, 50);
+      assert.strictEqual(typeof res_, 'string');
+    })
+    it.skip('Never use this one: the content of the url is going to be splitted bcz it is very long, >>>> this is having the readline', async () => {
       
       const rl = readline.createInterface({
         input: process.stdin,
@@ -54,7 +67,6 @@ describe('Retrieval chains', () => {
       });
       async function action1() {
         docs_ = await createDocFromUrl(
-          // _url = "https://js.langchain.com/docs/expression_language/"
           _url = "https://www.nbcnews.com/news/world/live-blog/israel-hamas-war-live-updates-rcna139320"
         )
         setTimeout(function() {

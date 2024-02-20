@@ -52,6 +52,7 @@ async function createToolsToSplitWebContent(
         input: _input,
         context: _docs
     });
+    let res_ = '';
     try {
         console.log('RawResponse: ', rawResponse)
         console.log('--------------------------------------------------------------')
@@ -59,20 +60,19 @@ async function createToolsToSplitWebContent(
         console.log('Response: ', response)
         console.log('--------------------------------------------------------------')
         
-        let strLet;
         response.then(res => {
             // Ici, 'response' est l'objet résolu de la promesse
-            strLet = res.answer
-            console.log(typeof strLet); // Affiche la section 'answer' de l'objet
+            res_ = res.answer
+            console.log(typeof res_); // Affiche la section 'answer' de l'objet
         }).catch(error => {
             // Gérer les erreurs ici
             console.error("Une erreur s'est produite :", error);
         });
-        return response
-        console.log(typeof response)
+        console.log(res_)
     }catch(error){
         console.error('Erreur lors du traitement de la réponse:', error);
     }
+    return res_
 }
 
 async function createDocFromUrl(
