@@ -14,6 +14,9 @@ const { StructuredOutputParser } = require ("langchain/output_parsers");
 // const { MemoryVectorStore } = require ("langchain/vectorstores/memory");
 // const { createRetrievalChain } = require ("langchain/chains/retrieval");
 
+const {AIMessage, HumanMessage} = require ('@langchain/core/messages');
+// import {MessagesPlaceholder} from '@langchain/core/prompts';
+
 const {
   CommaSeparatedListOutputParser,
   StringOutputParser,
@@ -24,10 +27,41 @@ const { createStuffDocumentsChain } = require ("langchain/chains/combine_documen
 
 /*
 */
-describe.only('Memory discussion', () => {
+describe('Memory discussion', () => {
   beforeEach(() => {
     config();
     load_model();
+  })
+  it.only('With fake discussion, looks like not working, not providing info from the prev discussion', async () => {
+    
+    setTimeout(async() => {
+      try {
+        const vectorStore = await createVectorStore(
+          _url = 'https://js.langchain.com/docs/expression_language/'
+        );
+        const chain = await createChain(vectorStore);
+        const chat_history =  [
+          new HumanMessage("Hello"),
+          new AIMessage("Hi, How can I help you ?"),
+          new HumanMessage("My name is Leon"),
+          new AIMessage("Hi Leon, how can I help you ?"),
+          new HumanMessage("What is LCELR ?"),
+          new AIMessage("LCELR stands for Low Change Exception Language Rate ?"),
+        ]
+
+        const response = await chain.invoke({
+          input: "Based on the previous discussion, what does LCELR stand for ?",
+          chat_history: chat_history
+        });
+        
+        console.log(response.answer);
+        
+        // console.log(response.answer);
+        assert.strictEqual(typeof response.answer, 'string');
+      }catch(error) {
+        console.error('Erreur lors du traitement de la réponse:', error);
+      }
+    }, 1);
   })
   it('Preparing for Memory discussion', async () => {
 
